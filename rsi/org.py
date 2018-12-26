@@ -1,29 +1,38 @@
 import time
-import requests
+from fuzzywuzzy import process
 from cachetools import TTLCache
 from bs4 import BeautifulSoup
 
 from . import DEFAULT_RSI_URL
+from .session import RSISession
 
 
 DEFAULT_CACHE_TTL = 300
 
 
 class OrgAPI(object):
-    def __init__(self, symbol, url=DEFAULT_RSI_URL, endpoint='/orgs', members_endpoint='/api/orgs/getOrgMembers',
-                 cache_ttl=DEFAULT_CACHE_TTL):
+    def __init__(self, symbol, admin_mode=False, url=DEFAULT_RSI_URL, endpoint='/orgs',
+                 members_endpoint='/api/orgs/getOrgMembers', cache_ttl=DEFAULT_CACHE_TTL, session=None,
+                 username='', password=''):
+        self.session = session
         self.symbol = symbol
         self.url = url.rstrip('/')
         self.endpoint = endpoint
         self.members_endpoint = members_endpoint
+        self.admin_mode = admin_mode
 
         self.org_url = "{}/{}/{}".format(self.url, self.endpoint.lstrip('/'), symbol)
         self.members_api = "{}/{}".format(self.url, self.members_endpoint.lstrip('/'))
         self._ttlcache = TTLCache(maxsize=1, ttl=cache_ttl)
 
+        if self.session is None:
+            self.session = RSISession(username=username, password=password, url=url)
+
+        self._update_details()   # pull and cache the org details which will raise 404 if not found
+
     def clear_cache(self):
         """ Resets the cache """
-        for key in self.__ttlcache.keys():
+        for key in self._ttlcache.keys():
             del self._ttlcache[key]
 
     def _cache(self, key, update_func, *args, **kwargs):
@@ -40,11 +49,15 @@ class OrgAPI(object):
             'page': 1
         }
 
+        if self.admin_mode:
+            params['admin_mode'] = 1
+
         # this just gets us going
         totalsize = 1
 
         while len(members) < totalsize:
-            r = requests.post(self.members_api, data=params)
+            r = self.session.post(self.members_api, data=params)
+
             if r.status_code == 200:
                 r = r.json()
                 if r is None:
@@ -55,8 +68,24 @@ class OrgAPI(object):
 
                 if r['success'] == 1:
                     apisoup = BeautifulSoup(r['data']['html'], features='lxml')
-                    for member in apisoup.select('.member-item .frontinfo .nick'):
-                        members.append(member.text.strip())
+                    for member in apisoup.select('.member-item'):
+                        members.append({
+                            'name': member.select_one('.name').text,
+                            'handle': member.select_one('.nick').text,
+                            'avatar': '{}{}'.format(self.url, member.select_one('img').attrs['src']),
+                            'affiliate': member.select_one('.title').text == 'Affiliate',
+                            'rank': member.select_one('.rank').text,
+                            'roles': [_.text for _ in member.select('.rolelist .role')],
+                            'url': '{}{}'.format(self.url, member.select_one('a.membercard').attrs['href']),
+                        })
+
+                        if self.admin_mode:
+                            members[-1].update({
+                                'id': member.attrs.get('data-member-id', ''),
+                                'last_online': member.select_one('.frontinfo .lastonline').text,
+                                'hidden ': member.select_one('.frontinfo .visibility'),
+                            })
+
                     params['page'] = params['page'] + 1
                 else:
                     raise ValueError('Received error fetching Org members: {}'.format(r))
@@ -66,19 +95,46 @@ class OrgAPI(object):
         return members
 
     def _update_details(self):
-        r = requests.get(self.org_url)
+        r = self.session.get(self.org_url)
         data = {}
-        if r.status_code == 200:
-            orgsoup = BeautifulSoup(r.text, features='lxml')
-            data['banner'] = '{}{}'.format(self.url, orgsoup.select_one('.banner img')['src'])
-            data['logo'] = '{}{}'.format(self.url, orgsoup.select_one('.logo img')['src'])
-            data['name'], data['symbol'] = orgsoup.select_one('.inner h1').text.split(' / ')
-            data['model'] = orgsoup.select_one('.inner .tags .model').text
-            data['commitment'] = orgsoup.select_one('.inner .tags .commitment').text
-            data['primary_focus'] = orgsoup.select_one('.inner .focus .primary img')['alt']
-            data['secondary_focus'] = orgsoup.select_one('.inner .focus .secondary img')['alt']
-            data['join_us'] = orgsoup.select_one('.join-us .body').text.strip()
+        r.raise_for_status()
+
+        orgsoup = BeautifulSoup(r.text, features='lxml')
+        data['banner'] = '{}{}'.format(self.url, orgsoup.select_one('.banner img')['src'])
+        data['logo'] = '{}{}'.format(self.url, orgsoup.select_one('.logo img')['src'])
+        data['name'], data['symbol'] = orgsoup.select_one('.inner h1').text.split(' / ')
+        data['model'] = orgsoup.select_one('.inner .tags .model').text
+        data['commitment'] = orgsoup.select_one('.inner .tags .commitment').text
+        data['primary_focus'] = orgsoup.select_one('.inner .focus .primary img')['alt']
+        data['secondary_focus'] = orgsoup.select_one('.inner .focus .secondary img')['alt']
+        data['join_us'] = orgsoup.select_one('.join-us .body').text.strip()
         return data
+
+    def search(self, handle, score_cutoff=80, limit=None):
+        """
+        Return members that match the given handle using fuzzy matching.
+
+        :param handle: Handle to match
+        :param score_cutoff: minimum matching score to return
+        :param limit: limit the number of matches found
+        :return: List of matched results in the form of [(dict, int)] where dict is the ship data and in is the
+                 matching confidence
+        """
+        choices = {i: _['name'] for i, _ in enumerate(self.members)}
+        return [(self.members[_[2]], _[1]) for _ in process.extractBests(handle, choices,
+                                                                         score_cutoff=score_cutoff, limit=limit)]
+
+    def search_one(self, handle):
+        """
+        Return the first member that matches the given handle using fuzzy matching, or None
+
+        :param handle: Handle to match
+        :return: The best matching member, or None
+        """
+        choices = self.search(handle, limit=1)
+        if choices:
+            return choices[0][0]
+        return None
 
     @property
     def members(self):
