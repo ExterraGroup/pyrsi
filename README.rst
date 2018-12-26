@@ -55,3 +55,14 @@ Accessing org information:
     org = OrgAPI('EXTERRA')
     member = org.members[0]
 
+Accessing admin org information for an organization that you have the Officer or Founder role for.
+This let's you see the member information for hidden members.
+
+.. code-block:: python
+
+    from rsi.org import OrgAPI
+    org = OrgAPI('EXTERRA', admin_true, username, password)
+    member = org.members[0]
+    members = org.search('fuzzy_handle_matching')     # list of members using fuzzy matching
+    member = org.search_one('fuzzy_handle_matching')  # returns only the top match
+
