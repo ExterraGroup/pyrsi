@@ -26,7 +26,9 @@ class OrgAPI(object):
         self._ttlcache = TTLCache(maxsize=1, ttl=cache_ttl)
 
         if self.session is None:
-            self.session = RSISession(username=username, password=password, url=url)
+            self.session = RSISession(url=url)
+            if username and password:
+                self.session.authenticate(username, password)
 
         self._update_details()   # pull and cache the org details which will raise 404 if not found
 
