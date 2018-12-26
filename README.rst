@@ -16,6 +16,7 @@ Python RSI
 
 Python API for interactive with the Roberts Space Industries site for Star Citizen.
 
+.. warning:: This API is in it's very early stages and will change often.
 
 * Free software: MIT license
 * Documentation: https://pyrsi.readthedocs.io.
