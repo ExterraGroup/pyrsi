@@ -85,7 +85,7 @@ class OrgAPI(object):
                             members[-1].update({
                                 'id': member.attrs.get('data-member-id', ''),
                                 'last_online': member.select_one('.frontinfo .lastonline').text,
-                                'visibility ': member.select_one('.frontinfo .visibility'),
+                                'visibility ': member.select_one('.frontinfo .visibility').text,
                             })
 
                     params['page'] = params['page'] + 1
