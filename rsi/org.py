@@ -122,7 +122,7 @@ class OrgAPI(object):
         :return: List of matched results in the form of [(dict, int)] where dict is the ship data and in is the
                  matching confidence
         """
-        choices = {i: _['name'] for i, _ in enumerate(self.members)}
+        choices = {i: _['handle'] for i, _ in enumerate(self.members)}
         return [(self.members[_[2]], _[1]) for _ in process.extractBests(handle, choices,
                                                                          score_cutoff=score_cutoff, limit=limit)]
 
