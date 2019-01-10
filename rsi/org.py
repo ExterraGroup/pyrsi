@@ -56,8 +56,9 @@ class OrgAPI(object):
 
         # this just gets us going
         totalsize = 1
+        members_scanned = 0
 
-        while len(members) < totalsize:
+        while members_scanned < totalsize:
             r = self.session.post(self.members_api, data=params)
 
             if r.status_code == 200:
@@ -71,6 +72,11 @@ class OrgAPI(object):
                 if r['success'] == 1:
                     apisoup = BeautifulSoup(r['data']['html'], features='lxml')
                     for member in apisoup.select('.member-item'):
+                        members_scanned += 1
+                        if member.select('.member-visibility-restriction'):
+                            print('skipping hidden member')
+                            continue
+
                         members.append({
                             'name': member.select_one('.name').text,
                             'handle': member.select_one('.nick').text,
@@ -79,6 +85,11 @@ class OrgAPI(object):
                             'rank': member.select_one('.rank').text,
                             'roles': [_.text for _ in member.select('.rolelist .role')],
                             'url': '{}{}'.format(self.url, member.select_one('a.membercard').attrs['href']),
+
+                            # defaults for things online admins will be able to get the real values of
+                            'id': '',
+                            'visibility': 'Membership: Visible',
+                            'last_online': '',
                         })
 
                         if self.admin_mode:
