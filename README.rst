@@ -13,6 +13,10 @@ Python RSI
         :target: https://pyrsi.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://coveralls.io/repos/github/ExterraGroup/pyrsi/badge.svg?branch=devel
+        :target: https://coveralls.io/github/ExterraGroup/pyrsi?branch=devel
+
+
 
 Python API for interactive with the Roberts Space Industries site for Star Citizen.
 
