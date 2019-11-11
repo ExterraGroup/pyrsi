@@ -3,7 +3,7 @@ from fuzzywuzzy import process
 from cachetools import TTLCache
 from bs4 import BeautifulSoup
 
-from . import DEFAULT_RSI_URL
+from rsi.conf import DEFAULT_RSI_URL
 from .session import RSISession
 
 

@@ -3,8 +3,7 @@ import pickle
 import requests
 import configparser
 
-from . import DEFAULT_RSI_URL
-
+from rsi.conf import DEFAULT_RSI_URL
 
 DEFAULT_SESSION_CONFIG = {
     'name': '',

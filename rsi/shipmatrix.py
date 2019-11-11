@@ -3,8 +3,7 @@ import requests
 from fuzzywuzzy import process
 from cachetools import TTLCache
 from bs4 import BeautifulSoup
-from rsi import DEFAULT_RSI_URL
-
+from rsi.conf import DEFAULT_RSI_URL
 
 DEFAULT_SHIPMATRIX_ENDPOINT = '/ship-matrix/index'
 DEFAULT_LOANER_MATRIX_URL = 'https://support.robertsspaceindustries.com/hc/en-us/articles/360003093114-Loaner-Ship-Matrix'

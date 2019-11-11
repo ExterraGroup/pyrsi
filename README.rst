@@ -44,7 +44,7 @@ Accessing citizen information:
 
 .. code-block:: python
 
-    from rsi import fetch_citizen
+    from rsi.citizen import fetch_citizen
     fetch_citizen('ventorvar')
 
 Accessing org information:
