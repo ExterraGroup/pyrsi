@@ -21,7 +21,7 @@ def cli_two_factor_prompt():
             raise ValueError()
         int(code)
     except ValueError:
-        raise ValueError(f'Invalid code entered: {code}')
+        raise ValueError('Invalid code entered: {}'.format(code))
     return code
 
 
