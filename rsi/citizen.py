@@ -14,7 +14,7 @@ def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=Fal
 
     page = _requests.get(citizen_url)
     if page.status_code == 200:
-        soup = _bs(page.text, features='lxml')
+        soup = _bs(page.text, features='html.parser')
         _ = [_.text for _ in soup.select(".info .value")[:3]]
         result['username'] = get_item(_, 0, '')
         result['handle'] = get_item(_, 1, '')
@@ -46,7 +46,7 @@ def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=Fal
         if not skip_orgs:
             orgs_page = _requests.get("{}/organizations".format(citizen_url))
             if orgs_page.status_code == 200:
-                orgsoup = _bs(orgs_page.text, features='lxml')
+                orgsoup = _bs(orgs_page.text, features='html.parser')
                 result['orgs'] = []
                 for org in orgsoup.select('.orgs-content .org'):
                     orgname, sid, rank = [_.text for _ in org.select('.info .entry .value')]
@@ -58,7 +58,7 @@ def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=Fal
                     if r.status_code == 200:
                         r = r.json()
                         if r['success'] == 1:
-                            apisoup = _bs(r['data']['html'], features='lxml')
+                            apisoup = _bs(r['data']['html'], features='html.parser')
                             roles = [_.text for _ in apisoup.select('.rolelist .role')]
 
                     orgdata = {

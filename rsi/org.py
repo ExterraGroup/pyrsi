@@ -70,7 +70,7 @@ class OrgAPI(object):
                     totalsize = int(r['data']['totalrows'])
 
                 if r['success'] == 1:
-                    apisoup = BeautifulSoup(r['data']['html'], features='lxml')
+                    apisoup = BeautifulSoup(r['data']['html'], features='html.parser')
                     for member in apisoup.select('.member-item'):
                         members_scanned += 1
                         if member.select('.member-visibility-restriction'):
@@ -112,7 +112,7 @@ class OrgAPI(object):
         data = {}
         r.raise_for_status()
 
-        orgsoup = BeautifulSoup(r.text, features='lxml')
+        orgsoup = BeautifulSoup(r.text, features='html.parser')
         data['banner'] = '{}{}'.format(self.url, orgsoup.select_one('.banner img')['src'])
         data['logo'] = '{}{}'.format(self.url, orgsoup.select_one('.logo img')['src'])
         data['name'], data['symbol'] = orgsoup.select_one('.inner h1').text.split(' / ')

@@ -16,8 +16,7 @@ requirements = [
     "requests==2.20.1",
     "fuzzywuzzy==0.17.0",
     "python-Levenshtein==0.12.0",
-    "beautifulsoup4==4.8.1",
-    "wptools==0.4.17"
+    "beautifulsoup4==4.8.1"
 ]
 
 setup_requirements = [ ]

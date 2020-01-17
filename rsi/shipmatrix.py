@@ -87,7 +87,7 @@ class ShipMatrixAPI(object):
                 def _by_name(name):
                     return process.extractBests(name, ship_choices, score_cutoff=80)
 
-                soup = BeautifulSoup(p.text, features='lxml')
+                soup = BeautifulSoup(p.text, features='html.parser')
                 lis = [_.text.replace('\xa0', ' ').replace('–', '-').split(' - ')
                        for _ in soup.select('.article-body ul')[1].select('li')]
                 ship_choices = {i: _['name'] for i, _ in enumerate(data['data'])}
