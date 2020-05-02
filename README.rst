@@ -35,6 +35,17 @@ Features
 Examples
 --------
 
+Getting system status:
+
+.. code-block:: python
+
+   from rsi.status import Status
+   s = Status()
+   current_status = s.system()
+   recent_incidents = s.timeline()
+   specific_incident = s.incident('28f92e5a')
+
+
 Accessing ship information:
 
 .. code-block:: python
