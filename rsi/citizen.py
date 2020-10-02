@@ -1,18 +1,19 @@
 import re as _re
 
-import requests as _requests
 from bs4 import BeautifulSoup as _bs
 from rsi.utils import get_item
 from rsi.conf import DEFAULT_RSI_URL
+from rsi.session import RSISession
 
 
-def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=False):
+def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=False, session=None):
+    session = session or RSISession()
     result = {}
     url = url.rstrip('/')
     citizen_url = "{}/{}/{}".format(url.rstrip('/'), endpoint.strip('/'), name)
     orgapiurl = '{}/{}'.format(url.rstrip('/'), 'api/orgs/getOrgMembers')
 
-    page = _requests.get(citizen_url)
+    page = session.get(citizen_url)
     if page.status_code == 200:
         soup = _bs(page.text, features='html.parser')
         _ = [_.text for _ in soup.select(".info .value")[:3]]
@@ -44,7 +45,7 @@ def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=Fal
         result['languages'] = result['languages'].replace(',', '').split()
 
         if not skip_orgs:
-            orgs_page = _requests.get("{}/organizations".format(citizen_url))
+            orgs_page = session.get("{}/organizations".format(citizen_url))
             if orgs_page.status_code == 200:
                 orgsoup = _bs(orgs_page.text, features='html.parser')
                 result['orgs'] = []
@@ -54,7 +55,7 @@ def fetch_citizen(name, url=DEFAULT_RSI_URL, endpoint='/citizens', skip_orgs=Fal
                         orgname = sid = rank = 'REDACTED'
 
                     roles = []
-                    r = _requests.post(orgapiurl, data={'symbol': sid, 'search': name})
+                    r = session.post(orgapiurl, data={'symbol': sid, 'search': name})
                     if r.status_code == 200:
                         r = r.json()
                         if r['success'] == 1:

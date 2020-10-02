@@ -11,24 +11,18 @@ DEFAULT_CACHE_TTL = 300
 
 
 class OrgAPI(object):
-    def __init__(self, symbol, admin_mode=False, url=DEFAULT_RSI_URL, endpoint='/orgs',
-                 members_endpoint='/api/orgs/getOrgMembers', cache_ttl=DEFAULT_CACHE_TTL, session=None,
-                 username='', password=''):
-        self.session = session
+    def __init__(self, symbol, session=None, admin_mode=False, url=DEFAULT_RSI_URL, endpoint='/orgs',
+                 members_endpoint='/api/orgs/getOrgMembers', cache_ttl=DEFAULT_CACHE_TTL):
         self.symbol = symbol
         self.url = url.rstrip('/')
         self.endpoint = endpoint
         self.members_endpoint = members_endpoint
         self.admin_mode = admin_mode
+        self.session = session or RSISession(url=url)
 
         self.org_url = "{}/{}/{}".format(self.url, self.endpoint.lstrip('/'), symbol)
         self.members_api = "{}/{}".format(self.url, self.members_endpoint.lstrip('/'))
         self._ttlcache = TTLCache(maxsize=1, ttl=cache_ttl)
-
-        if self.session is None:
-            self.session = RSISession(url=url)
-            if username and password:
-                self.session.authenticate(username, password)
 
         self._update_details()   # pull and cache the org details which will raise 404 if not found
 

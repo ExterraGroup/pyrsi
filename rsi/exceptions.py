@@ -1,0 +1,3 @@
+
+class RSIException(Exception):
+    pass
