@@ -51,9 +51,9 @@ Accessing ship information:
 .. code-block:: python
 
     from rsi.shipmatrix import ShipMatrixAPI
-    ships = ShipMatrixAPI()
-    ship = ships.list()[0]
-    ship = ships.search_by_name('kraken')
+    ship_matrix = ShipMatrixAPI()
+    ship = ship_matrix.ships[170]      # ships is a dictionary, keys are ship IDs
+    ship = ship_matrix.search_by_name('kraken')
 
 Accessing citizen information:
 

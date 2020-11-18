@@ -16,7 +16,7 @@ RSI_SESSION_DURATION = ['session', 'day', 'week', 'month', 'year']
 
 DEFAULT_API_ENDPOINTS = {
     'set_auth_token_endpoint': '/api/account/v2/setAuthToken',
-    'login_endpoint': '/api/account/signin',
+    'login_endpoint': '/api/launcher/v3/signin',
     'login_two_factor_endpoint': '/api/account/signinMultiStep',
     'session_check_endpoint': '/api/launcher/v3/games/claims',
     'signout_endpoint': '/api/account/signout',
