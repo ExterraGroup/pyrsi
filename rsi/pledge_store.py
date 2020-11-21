@@ -115,20 +115,19 @@ class PledgeStore(object):
             html += r['data']['html']
             row_count += r['data']['rowcount']
 
-        skus = {}
         soup = BeautifulSoup(html, features='html.parser')
         for item in soup.select('div.product-item.js-ecommerce-tracking-sku'):
             try:
-                skus[item.select('.title')[0].text.strip()] = dict(
+                yield item.select('.title')[0].text.strip(), dict(
                     title=item.select('.title')[0].text.strip(),
-                    price=item.select('.final-price')[0]['data-value'],
+                    image=item.select('img')[0].get('src', ''),
+                    price=item.select('.final-price')[0].get('data-value', ''),
                     price_str=item.select('.final-price')[0].text.strip(),
                     stock=item.select('.state')[0].text.strip(),
-                    link=f'{self.rsi_url}{item.select(".more")[0]["href"]}'
+                    link=f'{self.rsi_url}{item.select(".more")[0].get("href", "")}',
                 )
             except Exception as e:
                 print(repr(e))
-        return skus
 
     def pledge_extras(self, product_id="", search="", *args, **kwargs):
         return self.skus(product_id, search, type="extras", *args, **kwargs)
