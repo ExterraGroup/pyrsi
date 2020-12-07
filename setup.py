@@ -12,12 +12,12 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    "cachetools==2.1.0",
-    "requests==2.20.1",
-    "fuzzywuzzy==0.17.0",
-    "python-Levenshtein==0.12.0",
-    "beautifulsoup4==4.8.1",
-    "configparser==4.0.2"
+    "cachetools",
+    "requests",
+    "fuzzywuzzy",
+    "python-Levenshtein",
+    "beautifulsoup4",
+    "configparser"
 ]
 
 setup_requirements = [ ]
@@ -48,6 +48,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ExterraGroup/pyrsi',
-    version='0.1.13',
+    version='0.1.14',
     zip_safe=True,
 )
