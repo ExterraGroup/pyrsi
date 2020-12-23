@@ -46,6 +46,16 @@ Getting system status:
    specific_incident = s.incident('28f92e5a')
 
 
+Getting Roadmap information:
+
+.. code-block:: python
+
+    from datetime import datetime
+    from rsi.roadmap import Roadmap
+    r = Roadmap()
+    cur_roadmap = r.fetch_roadmap(start_date=datetime(year=2021, month=1, day=1),
+                                  end_date=datetime(year=2021, month=12, day=31))
+
 Accessing ship information:
 
 .. code-block:: python
@@ -80,4 +90,5 @@ This let's you see the member information for hidden members.
     member = org.members[0]
     members = org.search('fuzzy_handle_matching')     # list of members using fuzzy matching
     member = org.search_one('fuzzy_handle_matching')  # returns only the top match
+
 

@@ -4,6 +4,7 @@ from .shipmatrix import ShipMatrixAPI
 from .org import OrgAPI
 from .citizen import fetch_citizen
 from .status import Status
+from .roadmap import Roadmap
 
 
 class RSISite:
@@ -14,6 +15,7 @@ class RSISite:
 
         self.store = PledgeStore(session=self.session)
         self.ships = ShipMatrixAPI(session=self.session)
+        self.roadmap = Roadmap(session=self.session)
         self.status = Status()
 
     @property
