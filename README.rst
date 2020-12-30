@@ -1,28 +1,10 @@
-==========
 Python RSI
 ==========
 
-
-.. image:: https://img.shields.io/pypi/v/pyrsi.svg
-        :target: https://pypi.python.org/pypi/pyrsi
-
-.. image:: https://img.shields.io/travis/ExterraGroup/pyrsi.svg
-        :target: https://travis-ci.org/ExterraGroup/pyrsi
-
-.. image:: https://readthedocs.org/projects/pyrsi/badge/?version=latest
-        :target: https://pyrsi.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-.. image:: https://coveralls.io/repos/github/ExterraGroup/pyrsi/badge.svg?branch=devel
-        :target: https://coveralls.io/github/ExterraGroup/pyrsi?branch=devel
-
-
-
-Python API for interactive with the Roberts Space Industries site for Star Citizen.
+A community made Python API for interactive with the Roberts Space Industries site for Star Citizen.
 
 .. warning:: This API is in it's very early stages and will change often.
 
-* Free software: MIT license
 * Documentation: https://pyrsi.readthedocs.io.
 
 
@@ -92,3 +74,13 @@ This let's you see the member information for hidden members.
     member = org.search_one('fuzzy_handle_matching')  # returns only the top match
 
 
+
+
+.. image:: https://support.robertsspaceindustries.com/hc/article_attachments/360021770294/MadeByTheCommunity_Black.png
+  :width: 128
+  :alt: Made By the Star Citizen Community
+
+This project is not endorsed by or affiliated with the Cloud Imperium or Roberts Space Industries group of companies.
+All game content and materials are copyright Cloud Imperium Rights LLC and Cloud Imperium Rights Ltd..  Star Citizen®,
+Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC.
+All rights reserved.

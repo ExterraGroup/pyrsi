@@ -48,8 +48,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyRSI'
-copyright = u"2018, Exterra Group"
-author = u"Exterra Group"
+copyright = u"2021, Star Citizen Modding Community"
+author = u"Star Citizen Modding Community"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -130,7 +130,7 @@ latex_elements = {
 latex_documents = [
     (master_doc, 'rsi.tex',
      u'PyRSI Documentation',
-     u'Exterra Group', 'manual'),
+     u'Star Citizen Modding Community', 'manual'),
 ]
 
 

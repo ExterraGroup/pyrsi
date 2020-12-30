@@ -26,19 +26,19 @@ you through the process.
 From sources
 ------------
 
-The sources for Python RSI can be downloaded from the `Github repo`_.
+The sources for Python RSI can be downloaded from the `Gitlab repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/ExterraGroup/pyrsi
+    $ git clone git@gitlab.com:scmodding/frameworks/pyrsi.git
 
-Or download the `tarball`_:
+Or download the `zip`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/ExterraGroup/pyrsi/tarball/master
+    $ curl  -OL https://gitlab.com/scmodding/frameworks/pyrsi/-/archive/devel/pyrsi-devel.zip
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/ExterraGroup/pyrsi
-.. _tarball: https://github.com/ExterraGroup/pyrsi/tarball/master
+.. _Gitlab repo: https://gitlab.com/scmodding/frameworks/pyrsi
+.. _zip: https://gitlab.com/scmodding/frameworks/pyrsi/-/archive/devel/pyrsi-devel.zip

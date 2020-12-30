@@ -47,7 +47,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/ExterraGroup/pyrsi',
+    url='https://gitlab.com/scmodding/frameworks/pyrsi',
     version='0.1.15',
     zip_safe=True,
 )
