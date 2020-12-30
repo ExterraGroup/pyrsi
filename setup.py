@@ -48,6 +48,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://gitlab.com/scmodding/frameworks/pyrsi',
-    version='0.1.15',
+    version='0.1.16',
     zip_safe=True,
 )
